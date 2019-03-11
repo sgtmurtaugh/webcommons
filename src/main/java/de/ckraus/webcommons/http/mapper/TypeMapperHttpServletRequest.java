@@ -1,4 +1,4 @@
-package de.ckraus.webcommons.mapper;
+package de.ckraus.webcommons.http.mapper;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -6,13 +6,14 @@ import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.Enumeration;
 
-public class TypeMapperHttpServletRequestFacade extends TypeMapperServletRequestFacade implements HttpServletRequest {
+@SuppressWarnings({ "unused", "javadoc", "WeakerAccess" })
+public class TypeMapperHttpServletRequest extends TypeMapperServletRequest implements HttpServletRequest {
 
     /**
      * Constructor
      * @param httpServletRequest
      */
-    public TypeMapperHttpServletRequestFacade(HttpServletRequest httpServletRequest) {
+    public TypeMapperHttpServletRequest(HttpServletRequest httpServletRequest) {
        super(httpServletRequest);
     }
 
@@ -133,16 +134,14 @@ public class TypeMapperHttpServletRequestFacade extends TypeMapperServletRequest
                 : this.getRequest().getServletPath();
     }
 
-    public HttpSession getSession(boolean b) {
+    public HttpSession getSession(boolean createNew) {
         return this.getRequest() == null
                 ? null
-                : this.getRequest().getSession();
+                : this.getRequest().getSession(createNew);
     }
 
     public HttpSession getSession() {
-        return this.getRequest() == null
-                ? null
-                : this.getRequest().getSession();
+        return this.getSession(true);
     }
 
     public boolean isRequestedSessionIdValid() {
@@ -157,6 +156,12 @@ public class TypeMapperHttpServletRequestFacade extends TypeMapperServletRequest
         return this.getRequest() != null && this.getRequest().isRequestedSessionIdFromURL();
     }
 
+    /**
+     * isRequestedSessionIdFromUrl
+     * @deprecated
+     * @return
+     */
+    @Deprecated
     public boolean isRequestedSessionIdFromUrl() {
         return this.getRequest() != null && this.getRequest().isRequestedSessionIdFromUrl();
     }

@@ -1,8 +1,9 @@
-package de.ckraus.webcommons.mapper;
+package de.ckraus.webcommons.http.mapper;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -10,7 +11,8 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
 
-public class TypeMapperServletRequestFacade implements ServletRequest {
+@SuppressWarnings({ "unused", "javadoc", "WeakerAccess" })
+public class TypeMapperServletRequest extends ServletRequestWrapper {
 
     private ServletRequest servletRequest;
 
@@ -19,9 +21,8 @@ public class TypeMapperServletRequestFacade implements ServletRequest {
      * Constructor
      * @param servletRequest
      */
-    public TypeMapperServletRequestFacade(ServletRequest servletRequest ) {
-       super();
-       this.servletRequest = servletRequest;
+    public TypeMapperServletRequest(ServletRequest servletRequest) {
+       super(servletRequest);
     }
 
 
@@ -29,10 +30,10 @@ public class TypeMapperServletRequestFacade implements ServletRequest {
         return this.servletRequest;
     }
 
-    public Object getAttribute(String s) {
+    public Object getAttribute(String key) {
         return this.getRequest() == null
                 ? null
-                : this.getRequest().getAttribute(s);
+                : this.getRequest().getAttribute(key);
     }
 
     public Enumeration getAttributeNames() {
@@ -47,9 +48,9 @@ public class TypeMapperServletRequestFacade implements ServletRequest {
                 : this.getRequest().getCharacterEncoding();
     }
 
-    public void setCharacterEncoding(String s) throws UnsupportedEncodingException {
+    public void setCharacterEncoding(String encoding) throws UnsupportedEncodingException {
         if (this.getRequest() != null) {
-            this.getRequest().setCharacterEncoding(s);
+            this.getRequest().setCharacterEncoding(encoding);
         }
     }
 
@@ -71,10 +72,10 @@ public class TypeMapperServletRequestFacade implements ServletRequest {
                 : this.getRequest().getInputStream();
     }
 
-    public String getParameter(String s) {
+    public String getParameter(String key) {
         return this.getRequest() == null
                 ? null
-                : this.getRequest().getParameter(s);
+                : this.getRequest().getParameter(key);
     }
 
     public Enumeration getParameterNames() {
@@ -83,10 +84,10 @@ public class TypeMapperServletRequestFacade implements ServletRequest {
                 : this.getRequest().getParameterNames();
     }
 
-    public String[] getParameterValues(String s) {
+    public String[] getParameterValues(String key) {
         return this.getRequest() == null
                 ? null
-                : this.getRequest().getParameterValues(s);
+                : this.getRequest().getParameterValues(key);
     }
 
     public Map getParameterMap() {
@@ -137,15 +138,15 @@ public class TypeMapperServletRequestFacade implements ServletRequest {
                 : this.getRequest().getRemoteHost();
     }
 
-    public void setAttribute(String s, Object o) {
+    public void setAttribute(String key, Object value) {
         if (this.getRequest() != null) {
-            this.getRequest().setAttribute(s, o);
+            this.getRequest().setAttribute(key, value);
         }
     }
 
-    public void removeAttribute(String s) {
+    public void removeAttribute(String key) {
         if (this.getRequest() != null) {
-            this.getRequest().removeAttribute(s);
+            this.getRequest().removeAttribute(key);
         }
     }
 
@@ -172,16 +173,16 @@ public class TypeMapperServletRequestFacade implements ServletRequest {
     }
 
     /**
-     *
-     * @param s
+     * getRealPath
+     * @param path
      * @return
      * @deprecated
      */
     @Deprecated
-    public String getRealPath(String s) {
+    public String getRealPath(String path) {
         return this.getRequest() == null
                 ? null
-                : this.getRequest().getRealPath(s);
+                : this.getRequest().getRealPath(path);
     }
 
     public int getRemotePort() {
